@@ -69,11 +69,11 @@
 
             <div v-if="section>0" id="btns">
                 <button v-if="section>1" class="btn btn-primary" @click.prevent="prev">Previous</button>
-                <button v-if="section<questions[questions.length-1].group" class="btn btn-primary" @click.prevent="next">Next</button>
+                <button v-if="section<questions[questions.length-1].group" class="btn btn-primary" @click.prevent="next" :disabled="!validate()">Next</button>
                 <button v-if="section==questions[questions.length-1].group" @click.prevent="submit" class="btn btn-primary" id="submit">Submit</button>
             </div>
 
-            <div v-if="submitted">Thank you</div>
+            <div v-if="submitted"><p>Thank you. The data has been submitted.</p></div>
      </div>
      
 </template>
@@ -164,6 +164,11 @@ export default {
         },
         prev(){
             this.section--;
+        },
+        validate(){
+            if(this.email =='' || this.fullname=='' || this.date=='' || this.country ==''){
+                return false;
+            }else return true;
         }
     }
    

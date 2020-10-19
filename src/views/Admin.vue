@@ -1,6 +1,17 @@
 <template>
   <div class="about">
-    <h5>Modify Questions</h5>
+    <div class="top">
+      <h5>Modify Questions</h5>
+      <button class="btn btn-secondary" @click.prevent="addQuestion()">Add Question</button>
+    </div>
+
+    <!-- <div class="modal" is-active>
+  <div class="modal-background"></div>
+  <div class="modal-content">
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div> -->
+    
 
     <table class="table">
   <thead>
@@ -21,7 +32,7 @@
       <td>{{item.group}}</td>
       <td>{{item.category}}</td>
       <td>{{item.required}}</td>
-      <td><button class="btn btn-primary" id="delete" v-on:click="deleteQ(item.id)">Delete</button></td>
+      <td><button class="btn btn-danger" id="delete" v-on:click="deleteQ(item.id)">Delete</button></td>
     </tr>
   </tbody>
 </table>
@@ -36,7 +47,8 @@ export default {
     return {
       questions: [
         {id:0, q:'', a:[], group:0, category:'', required:false}
-      ]
+      ],
+      clicked:false
     }
   },
   methods:{
@@ -44,6 +56,10 @@ export default {
         axios.delete(`http://localhost:8081/q/del/${id}`)
         .then(msg => {console.log(msg)})
         .catch(err=>console.log(err));
+      },
+
+      addQuestion(){
+        this.clicked = true;
       }
   },
 
@@ -70,10 +86,10 @@ export default {
   .about {
     text-align:left;
   }
-  .btn btn-primary {
-    margin:0;
-    padding:0;
-    background-color:red !important;
+  .top{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
 </style>

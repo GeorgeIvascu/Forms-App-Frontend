@@ -25,28 +25,7 @@ export default {
     components: {
         Question
     },
-    data: function(){
-        return {
-            questions: [
-                {q:'', a:[], group:1}
-            ],
-            answers:[],
-            countries:[],
-            agree:false,
-            startText: 'You have 5 minutes to complete the form. All the questions marked with a red asterix are required. All the input data is registered and sent to the server after submitting. Good luck!'
-        }
-    },
-    methods: {
-
-    },
-
-    created(){
-        // axios.get("https://restcountries.eu/rest/v2/all")
-        // .then(res => {
-        //     this.countries = res.data
-        //     })
-        // .catch(err => console.log(err))
-    }
+   
 }
 </script>
 
