@@ -11,7 +11,11 @@
             </div>
 
             <!-- dynamic form rendering -->
-            <h6 v-if="section!=0"> Step {{section}} / {{questions[questions.length-1].group}}</h6>
+            <div class="q-head">
+                <h6 v-if="section!=0"> Step {{section}} / {{questions[questions.length-1].group}}</h6>
+                <template v-if="section>0">{{(timerCount/60).toString()[0]}}:{{timerCount%60}}</template>
+            </div>
+            
             <div class="col-12 form-group" v-for="item in questions" :key="item.q">
 
                 <div v-if="item.group == section">
@@ -98,12 +102,13 @@ export default {
             ],
             //category: ['radio', 'text', 'email', 'password', 'date', 'select', 'checkbox'],
             selectedAnswer: [
-                {q:'', a:''}
+                {q:[], a:[]}
             ],
             fullname:'',
             email:'',
             agree:false,
             submitted: false,
+            timerCount:5*60 + 1,
             startText: 'You have 5 minutes to complete the form. \n All the questions marked with a red asterix are required. All the input data is registered and sent to the server after submitting. Good luck!'
 
         }
@@ -131,9 +136,34 @@ export default {
 
     },
 
+    watch: {
+            timerCount: {
+                handler(value) {
+                    if (value > 0) {
+                        setTimeout(() => {
+                            this.timerCount--;
+                        }, 1000);
+                    }
+                },
+                immediate: true // This ensures the watcher is triggered upon creation
+            }
+        },
+
     methods: {
         submit() {
             this.submitted = true;
+
+            for(let i=0; i<this.questions.length-1; i++){
+                this.selectedAnswer[i].q[i] = this.question[i].q
+                if(this.question[i].category=='select'){
+                    this.selectedAnswer[i].a[i] = this.select;
+                }
+                if(this.question[i].category=='text'){
+                    this.selectedAnswer[i].a[i] = this.fullname;
+                }
+            }
+
+            console.log(this.selectedAnswer);
         },
          next(){
             this.section++;
@@ -155,10 +185,10 @@ export default {
 
             currentQuestions.forEach(e => console.log(e.q));
 
-            console.log(this.fullname, this.email, this.country, this.date, this.radio, this.checkbox, this.select)
+            //console.log(this.fullname, this.email, this.country, this.date, this.radio, this.checkbox, this.select)
             
 
-            this.selectedAnswer.push(this.fullname, this.email)
+            //this.selectedAnswer.push(this.fullname, this.email)
            // console.log(this.selectedAnswer);
             
         },
@@ -188,7 +218,7 @@ export default {
     .row{
         display:block;
     }
-     #btns{
+     #btns , .q-head{
         display:flex;
         flex-direction: row;
         justify-content: space-between;
