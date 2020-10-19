@@ -13,7 +13,7 @@
             <!-- dynamic form rendering -->
             <div class="q-head">
                 <h6 v-if="section!=0"> Step {{section}} / {{questions[questions.length-1].group}}</h6>
-                <template v-if="section>0">{{(timerCount/60).toString()[0]}}:{{timerCount%60}}</template>
+                <template v-if="startTimer">{{(timerCount/60).toString()[0]}}:{{timerCount%60}}</template>
             </div>
             
             <div class="col-12 form-group" v-for="item in questions" :key="item.q">
@@ -108,7 +108,8 @@ export default {
             email:'',
             agree:false,
             submitted: false,
-            timerCount:5*60 + 1,
+            timerCount:5*60,
+            startTimer: false,
             startText: 'You have 5 minutes to complete the form. \n All the questions marked with a red asterix are required. All the input data is registered and sent to the server after submitting. Good luck!'
 
         }
@@ -135,20 +136,7 @@ export default {
             })
 
     },
-
-    watch: {
-            timerCount: {
-                handler(value) {
-                    if (value > 0) {
-                        setTimeout(() => {
-                            this.timerCount--;
-                        }, 1000);
-                    }
-                },
-                immediate: true // This ensures the watcher is triggered upon creation
-            }
-        },
-
+   
     methods: {
         submit() {
             this.submitted = true;
@@ -167,6 +155,8 @@ export default {
         },
          next(){
             this.section++;
+            this.countDownTimer()
+            this.startTimer = true;
 
             var currentQuestions =[
                 {q:'', group:0, required:false}
@@ -199,6 +189,16 @@ export default {
             if(this.email =='' || this.fullname=='' || this.date=='' || this.country ==''){
                 return false;
             }else return true;
+        },
+        countDownTimer(){
+            if(this.timerCount > 0) {
+                    setTimeout(() => {
+                        this.timerCount -= 1
+                        this.countDownTimer()
+                    }, 1000)
+            }else{
+                this.submitted = true;
+            }
         }
     }
    
