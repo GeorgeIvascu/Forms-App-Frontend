@@ -2,7 +2,7 @@
   <div class="about">
     <div class="top">
       <h5>Modify Questions</h5>
-      <button class="btn btn-secondary" @click.prevent="addQuestion()">Add Question</button>
+      <button class="btn btn-secondary" @click="$router.push('admin/add')">Add Question</button>
     </div>
 
     <!-- <div class="modal" is-active>

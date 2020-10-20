@@ -78,6 +78,7 @@
             </div>
 
             <div v-if="submitted"><p>Thank you. The data has been submitted.</p></div>
+      
      </div>
      
 </template>
@@ -89,6 +90,7 @@ import axios from 'axios'
 export default {
     name:'Question',
     //props: ['section'],
+   
     data(){
         return {
             section:0,
@@ -102,8 +104,9 @@ export default {
             ],
             //category: ['radio', 'text', 'email', 'password', 'date', 'select', 'checkbox'],
             selectedAnswer: [
-                {q:[], a:[]}
+                {q:'', a:''}
             ],
+            showModal:true,
             fullname:'',
             email:'',
             agree:false,
@@ -139,19 +142,56 @@ export default {
    
     methods: {
         submit() {
+            this.countDownTimer -=this.countDownTimer;
             this.submitted = true;
+            
 
-            for(let i=0; i<this.questions.length-1; i++){
-                this.selectedAnswer[i].q[i] = this.question[i].q
-                if(this.question[i].category=='select'){
-                    this.selectedAnswer[i].a[i] = this.select;
+            this.questions.forEach(element => {
+                if(element.category == 'select'){
+                    this.selectedAnswer.push({
+                        q: element.q,
+                        a: this.select
+                    })
                 }
-                if(this.question[i].category=='text'){
-                    this.selectedAnswer[i].a[i] = this.fullname;
+                if(element.category == 'text'){
+                    this.selectedAnswer.push({
+                        q: element.q,
+                        a: this.fullname
+                    })
                 }
-            }
+                if(element.category == 'email'){
+                    this.selectedAnswer.push({
+                        q: element.q,
+                        a: this.email
+                    })
+                }
+                if(element.category == 'radio'){
+                    this.selectedAnswer.push({
+                        q: element.q,
+                        a: this.radio
+                    })
+                }
+                if(element.category == 'country'){
+                    this.selectedAnswer.push({
+                        q: element.q,
+                        a: this.country
+                    })
+                }
+                if(element.category == 'date'){
+                    this.selectedAnswer.push({
+                        q: element.q,
+                        a: this.date
+                    })
+                }
+                if(element.category == 'checkbox'){
+                    this.selectedAnswer.push({
+                        q: element.q,
+                        a: this.checkbox
+                    })
+                }
+            });
 
-            console.log(this.selectedAnswer);
+            console.log(this.selectedAnswer)
         },
          next(){
             this.section++;
